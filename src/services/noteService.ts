@@ -1,6 +1,52 @@
 import axios from 'axios';
-import type {} from '../types/note';
+import type { Note } from '../types/note';
 import toast from 'react-hot-toast';
 
-const API_KEY = import.meta.env.VITE_TMDB_TOKEN;
-const BASE_URL = 'https://api.themoviedb.org/3/search/movie';
+const API_KEY = import.meta.env.VITE_NOTEHUB_TOKEN;
+axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
+
+export interface fetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+export interface createNoteResponse {
+  note: Note;
+}
+
+export type SortOrder = 'created' | 'updated';
+export default async function fetchNotes(
+  query: string,
+  page: number,
+  sortOrder: SortOrder
+): Promise<fetchNotesResponse> {
+  if (!query.trim()) return { notes: [], totalPages: 0 };
+
+  try {
+    const response = await axios.get<fetchNotesResponse>(`/notes`, {
+      params: {
+        search: query,
+        page,
+        perPage: 10,
+        sortBy: sortOrder,
+      },
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    toast.error('There was an error, please try again...');
+    return { notes: [], totalPages: 0 };
+  }
+}
+
+export const createNote = async (data: createNoteResponse): Promise<Note> => {
+  const response = await axios.post<createNoteResponse>(`/notes`, data);
+  return response.data.note;
+};
+
+export const deleteNote = async (id: Note['id']) => {
+  const response = await axios.delete<Note>(`/notes/${id}`);
+  return response.data;
+};
