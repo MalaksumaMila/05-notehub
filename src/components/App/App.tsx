@@ -2,23 +2,24 @@ import { useEffect, useState } from 'react';
 import NoteList from '../NoteList/NoteList';
 import fetchNotes from '../../services/noteService';
 import css from './App.module.css';
-import ReactPaginate from 'react-paginate';
+import Pagination from '../Pagination/Pagination';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 import type { Note } from '../../types/note';
 
-import { Toaster } from 'react-hot-toast';
-import toast from 'react-hot-toast';
-
 export default function App() {
   const query = '';
-  const page = 1;
   const sortOrder = 'created';
+  const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['notes', query, page, sortOrder],
     queryFn: () => fetchNotes(query, page, sortOrder),
+    enabled: query !== '',
+    placeholderData: keepPreviousData,
   });
+
+  const pageCount = data?.perPage ?? 0;
 
   return (
     <div className={css.app}>
@@ -27,7 +28,9 @@ export default function App() {
         {isError && <p>Error...</p>}
         {data && !isLoading && <NoteList notes={data.notes} />}
         {/* Компонент SearchBox */}
-        {/* Пагінація */}
+        {isSuccess && pageCount > 1 && (
+          <Pagination page={page} setPage={setPage} pageCount={pageCount} />
+        )}
         {/* Кнопка створення нотатки */}
       </header>
     </div>

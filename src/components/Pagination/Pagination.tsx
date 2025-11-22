@@ -1,2 +1,28 @@
 import css from './Pagination.module.css';
-import type {} from '../../types/note';
+import ReactPaginate from 'react-paginate';
+
+interface PaginationProps {
+  page: number;
+  setPage: (page: number) => void;
+  pageCount: number;
+}
+export default function Pagination ({ page, setPage, pageCount }: PaginationProps) {
+
+
+    return (
+         <ReactPaginate
+            pageCount={pageCount}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={1}
+            onPageChange={({ selected }) => setPage(selected + 1)}
+            forcePage={page - 1}
+            containerClassName={css.pagination}
+            activeClassName={css.active}
+            nextLabel="→"
+            previousLabel="←"
+          />
+
+    )
+
+}
+ GET https://notehub-public.goit.study/api/notes?page=1&perPage=12
