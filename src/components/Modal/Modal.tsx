@@ -1,19 +1,20 @@
 import css from './Modal.module.css';
 import { createPortal } from 'react-dom';
-import type { Note } from '../../types/note';
+
 import { useEffect } from 'react';
 
 interface ModalProps {
   onClose: () => void;
-  note: Note[];
+  children: React.ReactNode;
 }
 
-export default function Modal({ note, onClose }: ModalProps) {
+export default function Modal({ children, onClose }: ModalProps) {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', onKeyDown);
+    р;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
@@ -29,22 +30,18 @@ export default function Modal({ note, onClose }: ModalProps) {
 
   return createPortal(
     <div
+      onClick={handleBackdropClick}
       className={css.backdrop}
       role="dialog"
       aria-modal="true"
-      onClick={handleBackdropClick}
     >
       <div className={css.modal}>
-        {
-          <button
-            className={css.closeButton}
-            onClick={onClose}
-            aria-label="Close modal"
-          >
-            &times;
-          </button>
-        }
+        <button type="button" className={css.closeBtn} onClick={onClose}>
+          ×
+        </button>
+        {children}
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal')!
   );
 }
