@@ -31,7 +31,7 @@ export default function App() {
         {isSuccess && pageCount > 1 && (
           <Pagination page={page} setPage={setPage} pageCount={pageCount} />
         )}
-        {/* Кнопка створення нотатки */}
+        {<button className={css.button}>Create note +</button>}
       </header>
     </div>
   );
