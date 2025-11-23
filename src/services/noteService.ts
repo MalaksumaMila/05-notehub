@@ -13,6 +13,12 @@ export interface createNoteResponse {
   note: Note;
 }
 
+export interface CreateNoteRequest {
+  title: string;
+  content: string;
+  tag: 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
+}
+
 export type SortOrder = 'created' | 'updated';
 export default async function fetchNotes(
   query: string,
@@ -40,8 +46,13 @@ export default async function fetchNotes(
   }
 }
 
-export const createNote = async (data: createNoteResponse): Promise<Note> => {
-  const response = await axios.post<createNoteResponse>(`/notes`, data);
+export const createNote = async (data: CreateNoteRequest): Promise<Note> => {
+  const response = await axios.post<createNoteResponse>(`/notes`, data, {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
+  });
+
   return response.data.note;
 };
 
