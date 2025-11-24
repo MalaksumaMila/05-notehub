@@ -8,9 +8,9 @@ import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
 
 export default function App() {
-  const query = '';
   const sortOrder = 'created';
   const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
 
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['notes', query, page, sortOrder],
@@ -19,34 +19,40 @@ export default function App() {
     placeholderData: keepPreviousData,
   });
 
-  const pageCount = data?.perPage ?? 0;
+  const pageCount = data?.totalPages ?? 0;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
+  console.log(data);
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
         {isLoading && <p>Loading...</p>}
         {isError && <p>Error...</p>}
-        {data && !isLoading && <NoteList notes={data.notes} />}
-        {/* Компонент SearchBox */}
         {isSuccess && pageCount > 1 && (
           <Pagination page={page} setPage={setPage} pageCount={pageCount} />
         )}
-        {isModalOpen && (
-          <Modal closeModal={closeModal}>
-            <NoteForm closeModal={closeModal} />
-          </Modal>
-        )}
+
+        {/* Компонент SearchBox */}
+
         {
           <button onClick={openModal} className={css.button}>
             Create note +
           </button>
         }
       </header>
+
+      {isSuccess && !isLoading && data.notes.length > 0 && (
+        <NoteList notes={data.notes} />
+      )}
+
+      {isModalOpen && (
+        <Modal closeModal={closeModal}>
+          <NoteForm closeModal={closeModal} />
+        </Modal>
+      )}
     </div>
   );
 }

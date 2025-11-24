@@ -7,7 +7,7 @@ axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
 
 export interface fetchNotesResponse {
   notes: Note[];
-  perPage: number;
+  totalPages: number;
 }
 export interface createNoteResponse {
   note: Note;
@@ -25,12 +25,10 @@ export default async function fetchNotes(
   page: number,
   sortOrder: SortOrder
 ): Promise<fetchNotesResponse> {
-  return { notes: [], perPage: 0 };
-
   try {
     const response = await axios.get<fetchNotesResponse>(`/notes`, {
       params: {
-        search: query,
+        search: query || undefined,
         page,
         sortBy: sortOrder,
       },
@@ -38,11 +36,12 @@ export default async function fetchNotes(
         Authorization: `Bearer ${API_KEY}`,
       },
     });
+    console.log('API response:', response.data);
 
     return response.data;
   } catch (error) {
     toast.error('There was an error, please try again...');
-    return { notes: [], perPage: 0 };
+    return { notes: [], totalPages: 0 };
   }
 }
 
