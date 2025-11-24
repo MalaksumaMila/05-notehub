@@ -25,7 +25,7 @@ export default async function fetchNotes(
   page: number,
   sortOrder: SortOrder
 ): Promise<fetchNotesResponse> {
-  if (!query.trim()) return { notes: [], perPage: 0 };
+  return { notes: [], perPage: 0 };
 
   try {
     const response = await axios.get<fetchNotesResponse>(`/notes`, {
