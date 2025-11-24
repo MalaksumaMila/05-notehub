@@ -23,7 +23,8 @@ export type SortOrder = 'created' | 'updated';
 export default async function fetchNotes(
   query: string,
   page: number,
-  sortOrder: SortOrder
+  sortOrder: SortOrder,
+  perPage: number
 ): Promise<fetchNotesResponse> {
   try {
     const response = await axios.get<fetchNotesResponse>(`/notes`, {
@@ -31,6 +32,7 @@ export default async function fetchNotes(
         search: query || undefined,
         page,
         sortBy: sortOrder,
+        perPage,
       },
       headers: {
         Authorization: `Bearer ${API_KEY}`,
@@ -56,6 +58,10 @@ export const createNote = async (data: CreateNoteRequest): Promise<Note> => {
 };
 
 export const deleteNote = async (id: Note['id']) => {
-  const response = await axios.delete<Note>(`/notes/${id}`);
+  const response = await axios.delete<Note>(`/notes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
+  });
   return response.data;
 };

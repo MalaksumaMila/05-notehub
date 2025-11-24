@@ -11,10 +11,11 @@ export default function App() {
   const sortOrder = 'created';
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
+  const perPage = 12;
 
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['notes', query, page, sortOrder],
-    queryFn: () => fetchNotes(query, page, sortOrder),
+    queryKey: ['notes', query, page, sortOrder, perPage],
+    queryFn: () => fetchNotes(query, page, sortOrder, perPage),
 
     placeholderData: keepPreviousData,
   });
