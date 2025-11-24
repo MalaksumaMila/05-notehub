@@ -4,14 +4,14 @@ import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 
 interface ModalProps {
-  onClose: () => void;
+  closeModal: () => void;
   children: React.ReactNode;
 }
 
-export default function Modal({ children, onClose }: ModalProps) {
+export default function Modal({ children, closeModal }: ModalProps) {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') closeModal();
     };
     document.addEventListener('keydown', onKeyDown);
 
@@ -22,10 +22,10 @@ export default function Modal({ children, onClose }: ModalProps) {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = prevOverflow;
     };
-  }, [onClose]);
+  }, [closeModal]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onClose();
+    if (e.target === e.currentTarget) closeModal();
   };
 
   return createPortal(
@@ -36,7 +36,7 @@ export default function Modal({ children, onClose }: ModalProps) {
       aria-modal="true"
     >
       <div className={css.modal}>
-        <button type="button" className={css.closeBtn} onClick={onClose}>
+        <button type="button" className={css.closeBtn} onClick={closeModal}>
           ×
         </button>
         {children}

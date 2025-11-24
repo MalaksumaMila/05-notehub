@@ -37,7 +37,7 @@ export default function App() {
           <Pagination page={page} setPage={setPage} pageCount={pageCount} />
         )}
         {isModalOpen && (
-          <Modal onClose={closeModal}>
+          <Modal closeModal={closeModal}>
             <NoteForm closeModal={closeModal} />
           </Modal>
         )}

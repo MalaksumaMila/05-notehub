@@ -32,8 +32,11 @@ const OrderSchema = Yup.object().shape({
     )
     .required('Tag is required'),
 });
+interface NoteFormProps {
+  closeModal: () => void;
+}
 
-export default function NoteForm() {
+export default function NoteForm({ closeModal }: NoteFormProps) {
   const fieldId = useId();
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -103,7 +106,11 @@ export default function NoteForm() {
         </div>
 
         <div className={css.actions}>
-          <button type="button" className={css.cancelButton}>
+          <button
+            onClick={closeModal}
+            type="button"
+            className={css.cancelButton}
+          >
             Cancel
           </button>
           <button type="submit" className={css.submitButton}>
