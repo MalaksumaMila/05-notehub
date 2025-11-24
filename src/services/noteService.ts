@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Note } from '../types/note';
+import type { Note, NoteTag } from '../types/note';
 import toast from 'react-hot-toast';
 
 const API_KEY = import.meta.env.VITE_NOTEHUB_TOKEN;
@@ -16,7 +16,7 @@ export interface createNoteResponse {
 export interface CreateNoteRequest {
   title: string;
   content: string;
-  tag: 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
+  tag: NoteTag;
 }
 
 export type SortOrder = 'created' | 'updated';
@@ -59,6 +59,15 @@ export const createNote = async (data: CreateNoteRequest): Promise<Note> => {
 
 export const deleteNote = async (id: Note['id']) => {
   const response = await axios.delete<Note>(`/notes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
+  });
+  return response.data;
+};
+
+export const updateNote = async (id: Note['id'], data: CreateNoteRequest) => {
+  const response = await axios.put<Note>(`/notes/${id}`, data, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,
     },

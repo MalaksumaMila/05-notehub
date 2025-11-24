@@ -54,8 +54,13 @@ export default function NoteForm({ closeModal }: NoteFormProps) {
     formikHelpers: FormikHelpers<NoteFormValues>
   ) => {
     mutation.mutate(values, {
-      onSuccess: () => formikHelpers.resetForm(),
-      onSettled: () => formikHelpers.setSubmitting(false),
+      onSuccess: () => {
+        formikHelpers.resetForm();
+        closeModal();
+      },
+      onSettled: () => {
+        formikHelpers.setSubmitting(false);
+      },
     });
   };
 
