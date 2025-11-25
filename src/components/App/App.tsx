@@ -57,7 +57,7 @@ export default function App() {
       </header>
 
       {isSuccess && !isLoading && data.notes.length > 0 && (
-        <NoteList notes={data.notes} setPage={setPage} />
+        <NoteList notes={data.notes} />
       )}
 
       {isModalOpen && (
