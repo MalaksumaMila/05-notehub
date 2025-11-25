@@ -6,16 +6,14 @@ import { deleteNote } from '../../services/noteService';
 
 interface NoteListProps {
   notes: Note[];
-  setPage: (page: number) => void;
 }
-export default function NoteList({ notes, setPage }: NoteListProps) {
+export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
 
   const { mutate: deleteNoteM, isPending } = useMutation({
     mutationFn: (id: Note['id']) => deleteNote(id),
 
     onSuccess: () => {
-      setPage(1);
       queryClient.invalidateQueries({ queryKey: ['notes'] });
     },
   });

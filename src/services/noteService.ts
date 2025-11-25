@@ -9,9 +9,6 @@ export interface fetchNotesResponse {
   notes: Note[];
   totalPages: number;
 }
-export interface createNoteResponse {
-  note: Note;
-}
 
 export interface CreateNoteRequest {
   title: string;
@@ -43,31 +40,22 @@ export default async function fetchNotes(
     return response.data;
   } catch (error) {
     toast.error('There was an error, please try again...');
-    return { notes: [], totalPages: 0 };
+    throw error;
   }
 }
 
 export const createNote = async (data: CreateNoteRequest): Promise<Note> => {
-  const response = await axios.post<createNoteResponse>(`/notes`, data, {
+  const response = await axios.post<Note>(`/notes`, data, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,
     },
   });
 
-  return response.data.note;
+  return response.data;
 };
 
 export const deleteNote = async (id: Note['id']) => {
   const response = await axios.delete<Note>(`/notes/${id}`, {
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-    },
-  });
-  return response.data;
-};
-
-export const updateNote = async (id: Note['id'], data: CreateNoteRequest) => {
-  const response = await axios.put<Note>(`/notes/${id}`, data, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,
     },
