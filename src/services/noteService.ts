@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { Note, NoteTag } from '../types/note';
-import toast from 'react-hot-toast';
+
 
 const API_KEY = import.meta.env.VITE_NOTEHUB_TOKEN;
 axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
@@ -17,7 +17,7 @@ export interface CreateNoteRequest {
 }
 
 export type SortOrder = 'created' | 'updated';
-export default async function fetchNotes(
+export  async function fetchNotes(
   query: string,
   page: number,
   sortOrder: SortOrder,
@@ -35,30 +35,30 @@ export default async function fetchNotes(
         Authorization: `Bearer ${API_KEY}`,
       },
     });
-    console.log('API response:', response.data);
+    
 
     return response.data;
   } catch (error) {
-    toast.error('There was an error, please try again...');
+    
     throw error;
   }
 }
 
-export const createNote = async (data: CreateNoteRequest): Promise<Note> => {
+export async function createNote ((data: CreateNoteRequest): Promise<Note>) {
   const response = await axios.post<Note>(`/notes`, data, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,
     },
   });
 
-  return response.data;
-};
+  return response.data;}
 
-export const deleteNote = async (id: Note['id']) => {
+
+export async function deleteNote (){  (id: Note['id']) => {
   const response = await axios.delete<Note>(`/notes/${id}`, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,
     },
   });
-  return response.data;
+  return response.data;}
 };
