@@ -11,7 +11,7 @@ export interface fetchNotesResponse {
 
 export interface CreateNoteRequest {
   title: string;
-  content: string;
+  content: string | null;
   tag: NoteTag;
 }
 
